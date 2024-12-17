@@ -1,0 +1,275 @@
+/* earrings.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+aside{
+    margin-top: 123px;
+}
+.product-count{
+   
+    margin-top: 30px;
+}
+h3{
+    font-size: 18px;
+}
+.ez{
+    color: rgb(232, 10, 10);
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 13px;
+}
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 80px;
+}
+
+/* Sidebar Styles */
+#sidebar .collapsible {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    font-size: 14px;
+    text-transform: uppercase; /* To keep text minimal */
+    font-weight: normal;
+}
+
+#sidebar .collapsible .arrow {
+    font-size: 12px;
+    transition: transform 0.3s ease;
+}
+
+/* Active arrow */
+#sidebar .collapsible.active .arrow {
+    transform: rotate(180deg);
+}
+
+
+/* Remove border from the dropdown */
+#sidebar .collapsible-content select::-ms-expand {
+    display: none;
+}
+
+/* underline */
+.sidebar-section {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+/* Main display name */
+.collapsible {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.content {
+    display: none;
+    padding: 10px 0;
+}
+
+.content.active {
+    display: block;
+}
+
+/* Price Range Slider */
+.price-slider-container {
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+
+#priceRangeMin, #priceRangeMax {
+    position: absolute;
+    width: 95%;
+    height: 4px;
+    margin-top: 14px;
+    top: 0;
+    left: 0;
+    -webkit-appearance: none;
+    background: purple;
+}
+
+#priceRangeMin::-webkit-slider-thumb,
+#priceRangeMax::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 15px;
+    height: 15px;
+    background: purple;
+    cursor: grab;
+    border-radius: 100%;
+}
+
+.price-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* Dropdown Styling */
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+    background-color: transparent; /* Transparent background */
+    border: none; /* No border */
+    outline: none; /* No outline */
+    font-size: 14px;
+    color: #333; /* Dark color for text */
+    text-transform: uppercase; /* Uppercase text for minimal style */
+    cursor: pointer; /* Pointer on hover */
+    transition: color 0.3s ease, background-color 0.3s ease; /* Smooth color transition */
+    -webkit-appearance: none; /* Remove default dropdown arrow in webkit browsers */
+    -moz-appearance: none; /* Remove default dropdown arrow in Firefox */
+    appearance: none; /* Remove default dropdown arrow in other browsers */
+    padding-right: 25px; /* Add space for custom arrow */
+}
+
+/* Custom Dropdown Arrow */
+select::after {
+    content: '▼'; /* Minimal down arrow */
+    position: absolute;
+    right: 10px; /* Position to the right */
+    top: 50%; /* Vertically center the arrow */
+    transform: translateY(-50%); /* Adjust position */
+    pointer-events: none; /* Make sure the arrow doesn't block interaction */
+    color: #666; /* Light color for the arrow */
+}
+/* Container to position the arrow correctly */
+.select-container {
+    position: relative;
+}
+/* Dropdown Option Styling */
+select option {
+    background-color: #fff;
+    color: #333;
+    padding: 8px;
+    font-size: 14px;
+    border: none;
+    transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* Hover effect on options */
+select option:hover {
+    background-color: #f0f0f0;
+    color: #000;
+}
+
+/* END OF SIDE BAR */
+
+/* Center Heading */
+.product-section h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #555;
+    text-align: center; /* Center heading */
+}
+
+/* Product Grid */
+.product-section {
+    width: 144%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Product Card Styles */
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    width: 220px;
+    height: 400px; /* Ensure consistent card height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push content evenly */
+    position: relative;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+.card.hidden {
+    display: none; /* Hide filtered earrings */
+}
+.card img {
+    width: 100%;
+    height: 250px; /* Fixed image height */
+    object-fit: cover; /* Ensure uniform image fitting */
+}
+
+/* Heart Button on Image */
+.card .heart-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: red;
+    z-index: 10;
+}
+
+.card .heart-btn:hover {
+    color: #ff523f; /* Red color on hover */
+
+}
+
+.card-title {
+    font-size: 14px;
+    margin: 10px 0 5px;
+    color: #555;
+    font-weight: bold;
+    height: 36px; /* Ensures consistent title space */
+    overflow: hidden; /* Prevents overflow for long titles */
+}
+
+.price {
+    font-size: 14px;
+    color: #888;
+    margin: 5px 0;
+}
+
+.price s {
+    margin-right: 5px;
+    color: #aaa;
+}
+
+.add-to-cart {
+    display: inline-block;
+    background-color: #7c4cf1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 10px auto 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #5b39a9;
+}

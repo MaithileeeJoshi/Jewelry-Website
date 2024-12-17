@@ -1,0 +1,595 @@
+JS=
+// Earrings Store JavaScript
+
+// Product Catalog (the products array itself is unchanged)
+const products = [
+    { id: 5, name: "Gold Hoop Earrings", category: "Hoop", color: "Gold", price: 459, material: "Metal" },
+    { id: 6, name: "Silver Stud Earrings", category: "Studs", color: "Silver", price: 499, material: "Metal" },
+    { id: 7, name: "Colorful Tassel Earrings", category: "Tassel", color: "Other Cute Colors", price: 699, material: "Fabric" },
+    { id: 8, name: "Pearl Huggie Earrings", category: "Huggies", color: "White / Pearl", price: 289, material: "Pearl" },
+    { id: 9, name: "Gold Threader Earrings", category: "Threaders", color: "Gold", price: 349, material: "Metal" },
+    { id: 10, name: "Colorful Hoop Earrings", category: "Hoop", color: "Other Cute Colors", price: 499, material: "Metal" },
+    { id: 11, name: "Classic Silver Studs", category: "Studs", color: "Silver", price: 549, material: "Metal" },
+    { id: 12, name: "Gold Tassel Earrings", category: "Tassel", color: "Gold", price: 399, material: "Fabric" },
+    { id: 13, name: "White Pearl Huggies", category: "Huggies", color: "White / Pearl", price: 299, material: "Pearl" },
+    { id: 14, name: "Silver Hoop Earrings", category: "Hoop", color: "Silver", price: 349, material: "Metal" },
+    { id: 15, name: "Gold Threader Earrings", category: "Threaders", color: "Gold", price: 459, material: "Metal" },
+    { id: 16, name: "Pearl Stud Earrings", category: "Studs", color: "White / Pearl", price: 599, material: "Pearl" },
+    { id: 17, name: "Colorful Huggie Earrings", category: "Huggies", color: "Other Cute Colors", price: 399, material: "Metal" },
+    { id: 18, name: "Party Tassel Earrings", category: "Tassel", color: "Gold", price: 479, material: "Fabric" },
+    { id: 19, name: "Silver Threader Earrings", category: "Threaders", color: "Silver", price: 529, material: "Metal" },
+    { id: 20, name: "Summer Hoop Earrings", category: "Hoop", color: "Other Cute Colors", price: 369, material: "Metal" }
+];
+
+// Cart Management
+class CartManager {
+    constructor() {
+        this.cartItems = [];
+    }
+
+    addToCart(itemName, price) {
+        if (!this.cartItems.some(item => item.name === itemName)) {
+            this.cartItems.push({ name: itemName, price: parseFloat(price) });
+            this.updateCartUI();
+            this.showNotification(`${itemName} has been added to your cart.`);
+        } else {
+            this.showNotification(`${itemName} is already in your cart.`);
+        }
+    }
+
+    updateCartUI() {
+        const cartCount = document.getElementById("cart-count");
+        if (cartCount) {
+            cartCount.textContent = this.cartItems.length;
+        }
+    }
+
+    showNotification(message) {
+        alert(message);
+    }
+
+    initializeCartButtons() {
+        const addToCartButtons = document.querySelectorAll(".add-to-cart");
+        addToCartButtons.forEach(button => {
+            button.addEventListener("click", () => {
+                const card = button.closest(".card");
+                const itemName = card.querySelector(".card-title").textContent.trim();
+                const priceElement = card.querySelector(".price");
+                const price = priceElement.textContent.replace(/.*Rs\.\s*/, "").trim();
+                this.addToCart(itemName, price);
+            });
+        });
+    }
+}
+
+// Product Filtering
+class ProductFilter {
+    constructor() {
+        this.initializeSidebarCollapse();
+        this.initializePriceRangeFilter();
+        this.initializeDropdownFilters();
+    }
+
+    initializeSidebarCollapse() {
+        const collapsibleHeaders = document.querySelectorAll(".collapsible");
+        collapsibleHeaders.forEach(header => {
+            header.addEventListener("click", () => {
+                const content = header.nextElementSibling;
+                content.classList.toggle("active");
+
+                // Toggle arrow
+                const arrow = header.querySelector(".arrow");
+                arrow.textContent = content.classList.contains("active") ? "▲" : "▼";
+            });
+        });
+    }
+
+    initializePriceRangeFilter() {
+        const priceRangeMin = document.getElementById("priceRangeMin");
+        const priceRangeMax = document.getElementById("priceRangeMax");
+        const priceRangeDisplay = document.getElementById("priceRangeDisplay");
+
+        const updatePriceDisplay = () => {
+            const minValue = Math.min(parseInt(priceRangeMin.value) || 0, parseInt(priceRangeMax.value) || Infinity);
+            const maxValue = Math.max(parseInt(priceRangeMin.value) || 0, parseInt(priceRangeMax.value) || Infinity);
+
+            priceRangeDisplay.textContent = `Rs. ${minValue} - Rs. ${maxValue}`;
+            this.filterProducts();
+        };
+
+        priceRangeMin.addEventListener("input", updatePriceDisplay);
+        priceRangeMax.addEventListener("input", updatePriceDisplay);
+    }
+
+    initializeDropdownFilters() {
+        const dropdowns = ["categoryDropdown", "colorDropdown", "materialDropdown"];
+        dropdowns.forEach(dropdownId => {
+            const dropdown = document.getElementById(dropdownId);
+            if (dropdown) {
+                dropdown.addEventListener("change", () => this.filterProducts());
+            }
+        });
+    }
+
+    filterProducts() {
+        const selectedCategory = this.getDropdownValue("categoryDropdown");
+        const selectedColor = this.getDropdownValue("colorDropdown");
+        const selectedMaterial = this.getDropdownValue("materialDropdown");
+        const minPrice = parseInt(document.getElementById("priceRangeMin").value) || 0;
+        const maxPrice = parseInt(document.getElementById("priceRangeMax").value) || Infinity;
+
+        const productCards = document.querySelectorAll(".product-grid .card");
+        let visibleProductCount = 0;
+
+        productCards.forEach(card => {
+            const cardPrice = parseFloat(card.dataset.price);
+            const cardCategory = card.dataset.type;
+            const cardColor = card.dataset.color;
+            const cardMaterial = card.dataset.material;
+
+            // Ensure category, color, and material match
+            const matches =
+                (selectedCategory === "all" || cardCategory.toLowerCase() === selectedCategory.toLowerCase()) &&
+                (selectedColor === "all" || cardColor.toLowerCase() === selectedColor.toLowerCase()) &&
+                (selectedMaterial === "all" || cardMaterial.toLowerCase() === selectedMaterial.toLowerCase()) &&
+                cardPrice >= minPrice && cardPrice <= maxPrice;
+
+            card.classList.toggle("hidden", !matches);
+            if (matches) visibleProductCount++;
+        });
+
+        const productCount = document.getElementById("product-count");
+        if (productCount) {
+            productCount.textContent = visibleProductCount;
+        }
+    }
+
+    getDropdownValue(dropdownId) {
+        const dropdown = document.getElementById(dropdownId);
+        return dropdown ? dropdown.value : "all";
+    }
+}
+
+// Initialize Application
+document.addEventListener("DOMContentLoaded", () => {
+    const productFilter = new ProductFilter();
+    const cartManager = new CartManager();
+
+    cartManager.initializeCartButtons();
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const filterParam = urlParams.get("filter");
+    if (filterParam) {
+        const dropdown = document.getElementById("categoryDropdown");
+        if (dropdown) {
+            dropdown.value = filterParam;
+            productFilter.filterProducts();
+        }
+    }
+});
+
+HTML=
+<!-- earrings.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Earrings Collection</title>
+    <link rel="stylesheet" href="earrings.css">
+</head>
+<body>
+    <!-- Main Container -->
+    <div class="container">
+      <!-- Sidebar -->
+      <aside class="sidebar">
+        <div class="sidebar-section">
+            <h3 class="collapsible">PRICE <span class="arrow">&#x2193;</span></h3>
+            <div class="content price-range-section">
+                <label for="priceRange">Price: <span id="priceRangeDisplay">Rs. 0.00 - Rs. 1,880.00</span></label>
+                <div class="price-slider-container">
+                    <input type="range" id="priceRangeMin" min="0" max="1880" value="0" step="10">
+                    <input type="range" id="priceRangeMax" min="0" max="1880" value="1880" step="10">
+                    <div class="price-values">
+                        <span id="minPriceDisplay">Rs. 0.00</span>
+                        <span id="maxPriceDisplay">Rs. 1,880.00</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="collapsible">PRODUCT CATEGORY <span class="arrow">&#x2193;</span></h3>
+            <div class="content">
+                <select id="categoryDropdown">
+                    <option value="all">All</option>
+                    <option value="Hoop">Hoop</option>
+                    <option value="Studs">Studs</option>
+                    <option value="Tassel">Tassel</option>
+                    <option value="Huggies">Huggies</option>
+                    <option value="Threaders">Threaders</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="collapsible">COLOUR <span class="arrow">&#x2193;</span></h3>
+            <div class="content">
+                <select id="colorDropdown">
+                    <option value="all">All</option>
+                    <option value="Gold">Gold</option>
+                    <option value="Silver">Silver</option>
+                    <option value="White / Pearl">White / Pearl</option>
+                    <option value="Other Cute Colors">Other Cute Colors</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="sidebar-section">
+            <h3 class="collapsible">MATERIAL <span class="arrow">&#x2193;</span></h3>
+            <div class="content">
+                <select id="materialDropdown">
+                    <option value="all">All</option>
+                    <option value="Metal">Metal</option>
+                    <option value="Fabric">Fabric</option>
+                    <option value="Pearl">Pearl</option>
+                </select>
+            </div>
+        </div>
+    </aside>
+
+        
+        <!-- Main Content -->
+        <main class="product-section">
+            <h1>All Earrings</h1>
+            <p>20 Products</p>
+            
+            <div class="product-grid">
+              <!-- Product Cards -->
+          
+              <div class="card" data-type="hoop" data-occasion="party-glam" data-color="gold" data-price="459" data-material="metal">
+                  <img src="img1.jpg" alt="Earring 5">
+                  <p class="card-title">Gold Hoop Earrings</p>
+                  <p class="price">Rs. 459.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="studs" data-occasion="everyday-office" data-color="silver" data-price="499" data-material="metal">
+                  <img src="img2.jpg" alt="Earring 6">
+                  <p class="card-title">Silver Stud Earrings</p>
+                  <p class="price">Rs. 499.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="tassel" data-occasion="party-glam summer-wear" data-color="other-cute-colors" data-price="699" data-material="fabric">
+                  <img src="img3.jpg" alt="Earring 7">
+                  <p class="card-title">Colorful Tassel Earrings</p>
+                  <p class="price">Rs. 699.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="huggies" data-occasion="everyday-office" data-color="white-pearl" data-price="289" data-material="pearl">
+                  <img src="img4.jpg" alt="Earring 8">
+                  <p class="card-title">Pearl Huggie Earrings</p>
+                  <p class="price">Rs. 289.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="threaders" data-occasion="party-glam" data-color="gold" data-price="349" data-material="metal">
+                  <img src="img5.jpg" alt="Earring 9">
+                  <p class="card-title">Gold Threader Earrings</p>
+                  <p class="price">Rs. 349.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="hoop" data-occasion="summer-wear" data-color="other-cute-colors" data-price="499" data-material="metal">
+                  <img src="img6.jpg" alt="Earring 10">
+                  <p class="card-title">Colorful Hoop Earrings</p>
+                  <p class="price">Rs. 499.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="studs" data-occasion="everyday-office" data-color="silver" data-price="549" data-material="metal">
+                  <img src="img7.jpg" alt="Earring 11">
+                  <p class="card-title">Classic Silver Studs</p>
+                  <p class="price">Rs. 549.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="tassel" data-occasion="party-glam" data-color="gold" data-price="399" data-material="fabric">
+                  <img src="img8.jpg" alt="Earring 12">
+                  <p class="card-title">Gold Tassel Earrings</p>
+                  <p class="price">Rs. 399.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="huggies" data-occasion="everyday-office" data-color="white-pearl" data-price="299" data-material="pearl">
+                  <img src="img9.jpg" alt="Earring 13">
+                  <p class="card-title">White Pearl Huggies</p>
+                  <p class="price">Rs. 299.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="hoop" data-occasion="party-glam" data-color="silver" data-price="349" data-material="metal">
+                  <img src="img10.jpg" alt="Earring 14">
+                  <p class="card-title">Silver Hoop Earrings</p>
+                  <p class="price">Rs. 349.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="threaders" data-occasion="summer-wear" data-color="gold" data-price="459" data-material="metal">
+                  <img src="img11.jpg" alt="Earring 15">
+                  <p class="card-title">Gold Threader Earrings</p>
+                  <p class="price">Rs. 459.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="studs" data-occasion="party-glam" data-color="white-pearl" data-price="599" data-material="pearl">
+                  <img src="img12.jpg" alt="Earring 16">
+                  <p class="card-title">Pearl Stud Earrings</p>
+                  <p class="price">Rs. 599.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="huggies" data-occasion="everyday-office" data-color="other-cute-colors" data-price="399" data-material="metal">
+                  <img src="img13.jpg" alt="Earring 17">
+                  <p class="card-title">Colorful Huggie Earrings</p>
+                  <p class="price">Rs. 399.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="tassel" data-occasion="party-glam summer-wear" data-color="gold" data-price="479" data-material="fabric">
+                  <img src="img14.jpg" alt="Earring 18">
+                  <p class="card-title">Party Tassel Earrings</p>
+                  <p class="price">Rs. 479.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="threaders" data-occasion="everyday-office" data-color="silver" data-price="529" data-material="metal">
+                  <img src="img15.jpg" alt="Earring 19">
+                  <p class="card-title">Silver Threader Earrings</p>
+                  <p class="price">Rs. 529.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          
+              <div class="card" data-type="hoop" data-occasion="summer-wear" data-color="other-cute-colors" data-price="369" data-material="metal">
+                  <img src="img16.jpg" alt="Earring 20">
+                  <p class="card-title">Summer Hoop Earrings</p>
+                  <p class="price">Rs. 369.00</p>
+                  <button class="add-to-cart">ADD TO CART</button>
+                  <button class="heart-btn" title="Add to Favorites">♥</button>
+              </div>
+          </div>
+
+        
+    <script src="earrings.js"></script>
+</body>
+</html>
+CSS=
+/* earrings.css */
+
+/* General Styles */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    background-color: #f9f9f9;
+    color: #333;
+}
+
+.container {
+    display: flex;
+    max-width: 1200px;
+    margin: 20px auto;
+    gap: 20px;
+}
+
+/* Sidebar Styles */
+/* Sidebar Styling */
+.sidebar {
+    width: 250px;
+    background-color: #f9f9f9;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar-section {
+    margin-bottom: 15px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.collapsible {
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+}
+
+.content {
+    display: none;
+    padding: 10px 0;
+}
+
+.content.active {
+    display: block;
+}
+
+/* Price Range Slider */
+.price-slider-container {
+    position: relative;
+    width: 100%;
+    height: 50px;
+}
+
+#priceRangeMin,
+#priceRangeMax {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    -webkit-appearance: none;
+    background: transparent;
+}
+
+#priceRangeMin::-webkit-slider-thumb,
+#priceRangeMax::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 20px;
+    height: 20px;
+    background: #4CAF50;
+    cursor: pointer;
+    border-radius: 50%;
+}
+
+.price-values {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 30px;
+}
+
+/* Dropdown Styling */
+select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 10px;
+}
+
+/* Product Grid */
+.product-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
+.card {
+    width: calc(25% - 15px);
+    border: 1px solid #e0e0e0;
+    padding: 15px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+/* Center Heading */
+.product-section h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #555;
+    text-align: center; /* Center heading */
+}
+
+/* Product Grid */
+.product-section {
+    width: 80%;
+    display: flex;
+    flex-direction: column;
+}
+
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 20px;
+    justify-items: center;
+}
+
+/* Product Card Styles */
+.card {
+    background-color: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    text-align: center;
+    transition: transform 0.3s ease-in-out;
+    width: 220px;
+    height: 400px; /* Ensure consistent card height */
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* Push content evenly */
+    position: relative;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+.card.hidden {
+    display: none; /* Hide filtered earrings */
+}
+.card img {
+    width: 100%;
+    height: 250px; /* Fixed image height */
+    object-fit: cover; /* Ensure uniform image fitting */
+}
+
+/* Heart Button on Image */
+.card .heart-btn {
+    position: absolute;
+    bottom: 15px;
+    right: 10px;
+    background: none;
+    border: none;
+    font-size: 30px;
+    cursor: pointer;
+    color: red;
+    z-index: 10;
+}
+
+.card .heart-btn:hover {
+    color: #ff523f; /* Red color on hover */
+
+}
+
+.card-title {
+    font-size: 14px;
+    margin: 10px 0 5px;
+    color: #555;
+    font-weight: bold;
+    height: 36px; /* Ensures consistent title space */
+    overflow: hidden; /* Prevents overflow for long titles */
+}
+
+.price {
+    font-size: 14px;
+    color: #888;
+    margin: 5px 0;
+}
+
+.price s {
+    margin-right: 5px;
+    color: #aaa;
+}
+
+.add-to-cart {
+    display: inline-block;
+    background-color: #7c4cf1;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    margin: 10px auto 15px;
+    cursor: pointer;
+    border-radius: 5px;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.add-to-cart:hover {
+    background-color: #5b39a9;
+}

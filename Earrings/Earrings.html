@@ -1,0 +1,247 @@
+<!-- earrings.html -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Earrings Collection</title>
+  <link rel="stylesheet" href="earrings.css">
+
+
+</head>
+
+<body>
+  <!-- Main Container -->
+  <div class="container">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="sidebar-section">
+        <h3 class="collapsible" id="Price">PRICE <span class="arrow">&#x2193;</span></h3>
+        <div class="content price-range-section">
+          <label for="priceRange">Price: <span id="priceRangeDisplay">Rs. 289 - Rs. 699</span></label>
+          <div class="price-slider-container">
+            <input type="range" id="priceRangeMin" min="289" max="699" value="289" step="10">
+            <input type="range" id="priceRangeMax" min="289" max="699" value="699" step="10">
+          </div>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="collapsible">PRODUCT CATEGORY <span class="arrow">&#x2193;</span></h3>
+        <div class="content">
+          <select id="categoryDropdown">
+            <option value="all">All</option>
+            <option value="Hoop">Hoop</option>
+            <option value="Studs">Studs</option>
+            <option value="Tassel">Tassel</option>
+            <option value="Huggies">Huggies</option>
+            <option value="Threaders">Threaders</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="collapsible">COLOUR <span class="arrow">&#x2193;</span></h3>
+        <div class="content">
+          <select id="colorDropdown">
+            <option value="all">All</option>
+            <option value="Gold">Gold</option>
+            <option value="Silver">Silver</option>
+            <option value="White / Pearl">White / Pearl</option>
+            <option value="Other Cute Colors">Other Cute Colors</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="sidebar-section">
+        <h3 class="collapsible">OCCASION <span class="arrow">&#x2193;</span></h3>
+        <div class="content">
+            <select id="occasionDropdown">
+                <option value="all">All</option>
+                <option value="Party Glam">Party Glam</option>
+                <option value="Summer Wear">Summer Wear</option>
+                <option value="Everyday Office">Everyday Office</option>
+            </select>
+        </div>
+    </div>
+    
+    </aside>
+
+
+    <!-- Main Content -->
+    <main class="product-section">
+      <h1 class="ez" style="color: purple;">All Earrings ★</h1>
+      <p id="product-count">20 Products</p>
+
+
+      <div class="product-grid">
+        <!-- Product Cards -->
+
+        <div class="card" data-type="Hoop" data-occasion="Party Glam" data-color="Gold" data-price="459">
+          <img src="/Earrings/images/Golden_Hoops_PartyWear_1.jpeg" alt="Earring 1">
+          <p class="card-title">Gold Hoop Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Hoop" data-occasion="Party Glam" data-color="Gold" data-price="459">
+          <img src="/Earrings/images/Golden_Hoops_PartyWear_2.jpeg" alt="Earring 2">
+          <p class="card-title">Gold Hoop Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Hoop" data-occasion="Party Glam" data-color="Gold" data-price="459">
+          <img src="/Earrings/images/Golden_Hoops_PartyWear_3.jpeg" alt="Earring 3">
+          <p class="card-title">Gold Hoop Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+
+        <div class="card" data-type="Hoop" data-occasion="Party Glam" data-color="Gold" data-price="459">
+          <img src="/Earrings/images/Golden_Hoops_PartyWear_4.jpeg" alt="Earring 4">
+          <p class="card-title">Gold Hoop Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Threaders" data-occasion="Summer Wear" data-color="Silver" data-price="459">
+          <img src="/Earrings/images/Silver_Threaders_SummerWear5.jpeg" alt="Earring 5">
+          <p class="card-title">Gold Hoop Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Studs" data-occasion="Everyday Office" data-color="Silver" data-price="499">
+          <img src="img2.jpg" alt="Earring 6">
+          <p class="card-title">Silver Stud Earrings</p>
+          <p class="price">Rs. 499.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Tassel" data-occasion="Summer Wear" data-color="Other Cute Colors" data-price="699">
+          <img src="img3.jpg" alt="Earring 7">
+          <p class="card-title">Colorful Tassel Earrings</p>
+          <p class="price">Rs. 699.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Huggies" data-occasion="Everyday Office" data-color="White / Pearl" data-price="289">
+          <img src="img4.jpg" alt="Earring 8">
+          <p class="card-title">Pearl Huggie Earrings</p>
+          <p class="price">Rs. 289.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Threaders" data-occasion="Everyday Office" data-color="Silver" data-price="349">
+          <img src="img5.jpg" alt="Earring 9">
+          <p class="card-title">Gold Threader Earrings</p>
+          <p class="price">Rs. 349.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Threaders" data-occasion="Summer Wear" data-color="Other Cute Colors" data-price="499">
+          <img src="img6.jpg" alt="Earring 10">
+          <p class="card-title">Colorful Hoop Earrings</p>
+          <p class="price">Rs. 499.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Studs" data-occasion="Everyday Office" data-color="Silver" data-price="549">
+          <img src="img7.jpg" alt="Earring 11">
+          <p class="card-title">Classic Silver Studs</p>
+          <p class="price">Rs. 549.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Tassel" data-occasion="Party Glam" data-color="White / Pearl" data-price="399">
+          <img src="img8.jpg" alt="Earring 12">
+          <p class="card-title">Gold Tassel Earrings</p>
+          <p class="price">Rs. 399.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Huggies" data-occasion="Everyday Office" data-color="White / Pearl" data-price="299">
+          <img src="img9.jpg" alt="Earring 13">
+          <p class="card-title">White Pearl Huggies</p>
+          <p class="price">Rs. 299.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Tassel" data-occasion="Summer Wear" data-color="Other Cute Colors" data-price="349">
+          <img src="img10.jpg" alt="Earring 14">
+          <p class="card-title">Silver Hoop Earrings</p>
+          <p class="price">Rs. 349.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Threaders" data-occasion="Summer Wear" data-color="Silver" data-price="459">
+          <img src="img11.jpg" alt="Earring 15">
+          <p class="card-title">Gold Threader Earrings</p>
+          <p class="price">Rs. 459.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Studs" data-occasion="Party Glam" data-color="White / Pearl" data-price="599">
+          <img src="img12.jpg" alt="Earring 16">
+          <p class="card-title">Pearl Stud Earrings</p>
+          <p class="price">Rs. 599.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Huggies" data-occasion="Everyday Office" data-color="Other Cute Colors" data-price="399" >
+          <img src="img13.jpg" alt="Earring 17">
+          <p class="card-title">Colorful Huggie Earrings</p>
+          <p class="price">Rs. 399.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Tassel" data-occasion="Party Glam" data-color="Gold" data-price="479">
+          <img src="img14.jpg" alt="Earring 18">
+          <p class="card-title">Party Tassel Earrings</p>
+          <p class="price">Rs. 479.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Huggies" data-occasion="Everyday Office" data-color="White / Pearl" data-price="529">
+          <img src="img15.jpg" alt="Earring 19">
+          <p class="card-title">Silver Threader Earrings</p>
+          <p class="price">Rs. 529.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+
+        <div class="card" data-type="Studs" data-occasion="Summer Wear" data-color="Other Cute Colors" data-price="369">
+          <img src="img16.jpg" alt="Earring 20">
+          <p class="card-title">Summer studs Earrings</p>
+          <p class="price">Rs. 369.00</p>
+          <button class="add-to-cart">ADD TO CART</button>
+          <button class="heart-btn" title="Add to Favorites">♥</button>
+        </div>
+      </div>
+
+
+      <script src="earrings.js"></script>
+</body>
+
+</html>
